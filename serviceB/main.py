@@ -6,6 +6,11 @@ from rabbitmq import consume_messages
 app = FastAPI()
 
 
+@app.on_event("startup")
+async def startup_event():
+    asyncio.create_task(consume_messages())
+
+
 @app.get("/")
 async def root():
     return {"message": "Service B"}
@@ -13,9 +18,7 @@ async def root():
 
 @app.get("/messages")
 async def get_messages():
-    asyncio.create_task(consume_messages())
+    return {"status": "OK"}
+    #message = asyncio.create_task(consume_messages())
+    #return {"status": "OK", "message": message}
 
-
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
