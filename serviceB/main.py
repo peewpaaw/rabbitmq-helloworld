@@ -1,11 +1,19 @@
 from fastapi import FastAPI
+import asyncio
+
+from rabbitmq import consume_messages
 
 app = FastAPI()
 
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Service B"}
+
+
+@app.get("/messages")
+async def get_messages():
+    asyncio.create_task(consume_messages())
 
 
 @app.get("/hello/{name}")
