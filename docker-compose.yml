@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  service_a:
+    build:
+      context: ./serviceA
+      dockerfile: Dockerfile
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    ports:
+      - 8000:8000
+
+  service_b:
+    build:
+      context: ./serviceB
+      dockerfile: Dockerfile
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8001
+    ports:
+      - 8001:8001
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+      - 5672:5672
+      - 15672:15672
